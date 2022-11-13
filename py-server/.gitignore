@@ -1,0 +1,4 @@
+__pycache__/
+.rt/
+.vscode/
+*.ipynb
