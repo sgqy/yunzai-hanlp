@@ -11,11 +11,11 @@ export class hanlp_wrapper extends plugin {
             rule: [
                 {
                     reg: '^#文析',
-                    fnc: 'route',
+                    fnc: 'doNlp',
                 },
                 {
                     reg: '^#文似',
-                    fnc: 'route',
+                    fnc: 'doCmp',
                 },
                 {
                     reg: '#[Hh][Aa][Nn][Ll][Pp]',
@@ -25,25 +25,34 @@ export class hanlp_wrapper extends plugin {
         })
     };
 
-    async route(e) {
-        let obj = null;
-
-        if (/^#文析/.test(e.msg)) {
-            let s = e.msg.replace(/^#文析\s*([\s\S]*)/g, '$1');
-            s = s.replace(/\s/g, '');
-            obj = await hanlp.nlp(s);
-        } else if (/^#文似/.test(e.msg)) {
-            let s = e.msg.replace(/^#文似\s*([\s\S]*)/g, '$1');
-            let l = s.split(/\s+/);
-            if (l.length < 2) {
-                obj = '输入句子对比语义\n#文似 句一 句二';
-            } else {
-                let sim = await hanlp.cmp(l[0], l[1]);
-                obj = `●${l[0]}\n●${l[1]}\n相似度：${sim}`;
-            }
+    async doCmp(e) {
+        let s = e.msg.replace(/^#文似\s*([\s\S]*)/g, '$1');
+        let l = s.split(/\s+/);
+        if (l.length < 2) {
+            await this.reply('输入句子对比语义\n#文似 句一 句二');
+            return;
         }
+        let obj = await hanlp.cmp(l[0], l[1]);
+        if (!obj.data) {
+            await this.reply(obj.msg);
+            return;
+        }
+        await this.reply(`●${l[0]}\n●${l[1]}\n相似度：${obj.data.sts}`);
+    }
 
-        await this.reply(obj);
+    async doNlp(e) {
+        let s = e.msg.replace(/^#文析\s*([\s\S]*)/g, '$1');
+        let l = s.split(/\s+/);
+        if (l.length < 1) {
+            await this.reply('输入句子分析结构\n#文似 要分析的句子');
+            return;
+        }
+        let obj = await hanlp.nlp(l[0]);
+        if (!obj.data) {
+            await this.reply(obj.msg);
+            return;
+        }
+        await this.reply(`语种 ${obj.data.lang}\n结果长度 ${obj.data.plot.html.length}\n展示功能咕咕中`);
     };
 
     async help(e) {
@@ -52,6 +61,6 @@ export class hanlp_wrapper extends plugin {
             + '#文似 句一 句二\n判断两句相似度\n'
             + '------\n'
             + '#文析 句子\n分析句子结构';
-        await this.reply(msg)
+        await this.reply(msg);
     }
 }

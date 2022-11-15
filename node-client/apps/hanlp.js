@@ -5,28 +5,29 @@ let logger = global.logger || global.Bot?.logger || {}
 
 class hanlp {
     async nlp(s) {
-        return cfg.nlpUri;
+        let res = await fetch(cfg.nlpUri, cfg.reqObj({ q: s }))
+            .catch((err) => logger.error(err));
+        if (!res) {
+            logger.error(cfg.e500);
+            return { msg: cfg.e500 };
+        }
+        res = await res.json();
+        logger.info(`hanlp.nlp: ${res.code} ${res.msg}`);
+
+        return res;
     }
 
     async cmp(s1, s2) {
-        let res = await fetch(cfg.cmpUri, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                a: s1,
-                b: s2,
-            }),
-        }).catch((err) => logger.error(err));
+        let res = await fetch(cfg.cmpUri, cfg.reqObj({ a: s1, b: s2, }))
+            .catch((err) => logger.error(err));
         if (!res) {
-            logger.error('HanLP 相似度 接口错误')
-            return 'HanLP 相似度 接口错误';
+            logger.error(cfg.e500);
+            return { msg: cfg.e500 };
         }
-        res = await res.json()
-        logger.info(res)
+        res = await res.json();
+        logger.info(`hanlp.cmp: ${res.code} ${res.msg}`);
 
-        return res.data?.sts || res.msg;
+        return res;
     }
 }
 
