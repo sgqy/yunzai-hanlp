@@ -16,6 +16,7 @@ env python3 -m venv .rt # 建议使用分离的环境
 source .rt/bin/activate
 pip3 install -r requirements.txt --no-cache-dir # 小内存安装 torch 时禁用缓存
 ```
+
 使用 `screen`、`nohup`、`crontab`、`systemd` 等工具后台启动服务器
 
 ### Yunzai-Bot v3 插件
@@ -27,7 +28,13 @@ mv /work/yunzai-hanlp/node-client ./plugins/hanlp
 npm start
 npm run log
 ```
+
 ## 输出格式
 
-修改 `.rt/lib/python3.9/site-packages/hanlp_common/document.py` 中函数 `to_pretty` 下的 `if html:` 节，以自行设置输出数据的样式。修改字体时要预先确定执行环境已安装了对应字体。
+依据`.rt/lib/python3.9/site-packages/hanlp_common/document.py` 中函数 `to_pretty` 下的 `if html:` 节，需要定义 CSS 式样并通过 `!important` 显式重载。
 
+```css
+#plot pre {
+    font-family: Consolas, DejaVu Sans Mono, Noto Sans Mono CJK SC, SimHei !important;
+}
+```
