@@ -13,6 +13,10 @@ class cfg {
             }
         };
         this.e500 = 'HanLP 服务端接口错误';
+
+        this.tpl = './plugins/hanlp/resources/html/';
+        this.nlpTpl = this.tpl + 'nlp.html';
+        this.cmpTpl = this.tpl + 'cmp.html';
     }
 }
 

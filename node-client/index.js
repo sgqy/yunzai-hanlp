@@ -1,4 +1,6 @@
 import plugin from '../../lib/plugins/plugin.js'
+import puppeteer from '../../lib/puppeteer/puppeteer.js'
+import cfg from './apps/cfg.js';
 import hanlp from './apps/hanlp.js'
 
 export class hanlp_wrapper extends plugin {
@@ -37,7 +39,16 @@ export class hanlp_wrapper extends plugin {
             await this.reply(obj.msg);
             return;
         }
-        await this.reply(`●${l[0]}\n●${l[1]}\n相似度：${obj.data.sts}`);
+
+        let img = await puppeteer.screenshot('hanlp', {
+            tplFile: cfg.cmpTpl,
+            s1: l[0],
+            s2: l[1],
+            sts: obj.data.sts
+        });
+        if (img) {
+            await this.reply(img);
+        }
     }
 
     async doNlp(e) {
@@ -52,7 +63,16 @@ export class hanlp_wrapper extends plugin {
             await this.reply(obj.msg);
             return;
         }
-        await this.reply(`语种 ${obj.data.lang}\n结果长度 ${obj.data.plot.html.length}\n展示功能咕咕中`);
+
+        let img = await puppeteer.screenshot('hanlp', {
+            tplFile: cfg.nlpTpl,
+            lang: obj.data.lang,
+            text: l[0],
+            plot: obj.data.plot.html,
+        });
+        if (img) {
+            await this.reply(img);
+        }
     };
 
     async help(e) {

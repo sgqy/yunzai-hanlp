@@ -1,0 +1,25 @@
+<style>
+    body {
+        position: absolute;
+        padding: 0.5em;
+    }
+    #title {
+        font-family: Smiley Sans, Noto Sans CJK SC;
+        margin-bottom: 1em;
+    }
+    #lang {
+        margin-right: 1em;
+        color: darkred;
+        border: 0.5px solid grey;
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+    #text {
+        color: darkgreen;
+    }
+</style>
+<div id="title">
+    <span id="lang">{{ lang }}</span>
+    <span id="text">{{ text }}</span>
+</div>
+<div>{{@ plot }}</div>
