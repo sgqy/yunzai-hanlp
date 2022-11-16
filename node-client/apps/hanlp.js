@@ -4,8 +4,8 @@ import fetch from 'node-fetch'
 let logger = global.logger || global.Bot?.logger || {}
 
 class hanlp {
-    async nlp(s) {
-        let res = await fetch(cfg.nlpUri, cfg.reqObj({ q: s }))
+    async nlp(s, t) {
+        let res = await fetch(cfg.nlpUri, cfg.reqObj({ q: s, l: t, }))
             .catch((err) => logger.error(err));
         if (!res) {
             logger.error(cfg.e500);

@@ -31,7 +31,7 @@ export class hanlp_wrapper extends plugin {
         let s = e.msg.replace(/^#文似\s*([\s\S]*)/g, '$1');
         let l = s.split(/\s+/);
         if (l.length < 2) {
-            await this.reply('输入句子对比语义\n#文似 句一 句二');
+            await this.reply(cfg.cmpHlp);
             return;
         }
         let obj = await hanlp.cmp(l[0], l[1]);
@@ -54,11 +54,11 @@ export class hanlp_wrapper extends plugin {
     async doNlp(e) {
         let s = e.msg.replace(/^#文析\s*([\s\S]*)/g, '$1');
         let l = s.split(/\s+/);
-        if (l.length < 1) {
-            await this.reply('输入句子分析结构\n#文似 要分析的句子');
+        if (l.length < 1 || !l[0]) {
+            await this.reply(cfg.nlpHlp);
             return;
         }
-        let obj = await hanlp.nlp(l[0]);
+        let obj = await hanlp.nlp(l[0], l[1]);
         if (!obj.data) {
             await this.reply(obj.msg);
             return;
@@ -76,11 +76,7 @@ export class hanlp_wrapper extends plugin {
     };
 
     async help(e) {
-        const msg = 'HanLP 文本分析 AI\n'
-            + '------\n'
-            + '#文似 句一 句二\n判断两句相似度\n'
-            + '------\n'
-            + '#文析 句子\n分析句子结构';
+        const msg = `HanLP 文本分析 AI\n${cfg.nlpHlp}\n${cfg.cmpHlp}`;
         await this.reply(msg);
     }
 }

@@ -11,28 +11,35 @@ CORS(app)
 
 @app.route('/nlp', methods=['POST'])
 def nlp():
+    '''
+    post json object. { q: query text, l: specify language }
+    '''
     try:
         data = request.get_json()
-        query = data['q'] or ''
+        query = data.get('q')
+        lang = data.get('l')
         return {
             'code': 0,
             'msg': 'Sentence Analyze',
-            'data': ayz.nlp(query),
+            'data': ayz.nlp(query, lang),
         }
     except Exception as ec:
         return {
             'code': -2,
-            'msg': str(ec),
+            'msg': repr(ec),
             'data': None,
         }, 500
 
 
 @app.route('/cmp', methods=['POST'])
 def cmp():
+    '''
+    post json object { a: sentence to compare, b: sentence to compare }
+    '''
     try:
         data = request.get_json()
-        ta = data['a'] or ''
-        tb = data['b'] or ''
+        ta = data.get('a')
+        tb = data.get('b')
         return {
             'code': 0,
             'msg': 'Sentence Compare',
@@ -41,7 +48,7 @@ def cmp():
     except Exception as ec:
         return {
             'code': -2,
-            'msg': str(ec),
+            'msg': repr(ec),
             'data': None,
         }, 500
 

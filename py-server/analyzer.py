@@ -21,8 +21,13 @@ class Analyzer:
             hanlp.pretrained.mtl.UD_ONTONOTES_TOK_POS_LEM_FEA_NER_SRL_DEP_SDP_CON_XLMR_BASE)
         self._log('Load model done.')
 
-    def nlp(self, q):
-        lang = self.lit(q)
+    def nlp(self, q, l):
+        lang = None
+        if l in ['zh', 'ja']:
+            lang = l
+        else:
+            lang = self.lit(q)
+
         plot = None
         if lang == 'zh':
             plot = self.zh(q)

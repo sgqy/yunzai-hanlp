@@ -17,9 +17,12 @@
     #text {
         color: darkgreen;
     }
+    #plot pre {
+        font-family: Consolas, DejaVu Sans Mono, Noto Sans Mono CJK SC, SimHei !important;
+    }
 </style>
 <div id="title">
     <span id="lang">{{ lang }}</span>
     <span id="text">{{ text }}</span>
 </div>
-<div>{{@ plot }}</div>
+<div id="plot">{{@ plot }}</div>
